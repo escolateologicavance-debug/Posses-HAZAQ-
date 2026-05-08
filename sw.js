@@ -1,26 +1,11 @@
-const CACHE_NAME = 'hazaq-posses-v1';
-const assets = [
-'index.html',
-'logo-192.png',
-'logo-512.png'
-];
+const cacheName = 'hazaq-posses-v2';
+const assets = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', e => {
-e.waitUntil(
-caches.open(CACHE_NAME).then(cache => {
-return cache.addAll(assets);
-})
-);
+  e.waitUntil(caches.open(cacheName).then(c => c.addAll(assets)));
 });
 
 self.addEventListener('fetch', e => {
-// Permite que links externos (como o do WhatsApp) funcionem sem passar pelo cache
-if (e.request.url.includes('api.whatsapp.com') || e.request.url.includes('wa.me')) {
-return fetch(e.request);
-}
-e.respondWith(
-caches.match(e.request).then(res => {
-return res || fetch(e.request);
-})
-);
+  if (e.request.url.includes('whatsapp.com')) return;
+  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
 });
