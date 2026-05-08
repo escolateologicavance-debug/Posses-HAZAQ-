@@ -6,20 +6,24 @@
 <title>Posses HAZAQ</title>
 <style>
 body { font-family: sans-serif; background: #f0f2f5; margin: 0; padding: 10px; }
-.container { max-width: 600px; margin: auto; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-header { border-bottom: 2px solid #333; margin-bottom: 15px; padding-bottom: 10px; }
-.logos img { height: 60px; }
-h1 { font-size: 18px; margin: 10px 0; }
-.form-box { background: #f9f9f9; padding: 10px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 20px; }
-.campo { margin-bottom: 10px; }
+.container { max-width: 500px; margin: auto; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+.logos img { height: 60px; display: block; margin-bottom: 10px; }
+h1 { font-size: 18px; border-bottom: 2px solid #333; padding-bottom: 10px; }
+.campo { margin-bottom: 12px; }
 label { display: block; font-weight: bold; font-size: 12px; margin-bottom: 4px; }
 input, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; font-size: 16px; box-sizing: border-box; }
-.btn-green { background: #27ae60; color: white; padding: 18px; border: none; border-radius: 4px; font-weight: bold; font-size: 18px; width: 100%; cursor: pointer; }
-.table-wrap { width: 100%; overflow-x: auto; }
-table { width: 100%; border-collapse: collapse; min-width: 500px; margin-top: 10px; }
-th, td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 12px; }
-th { background: #333; color: white; }
-.btn-red { background: #c0392b; color: white; padding: 8px; border: none; border-radius: 4px; margin-top: 20px; cursor: pointer; }
+.btn-link {
+display: block;
+background: #27ae60;
+color: white;
+padding: 18px;
+text-align: center;
+text-decoration: none;
+border-radius: 4px;
+font-weight: bold;
+font-size: 18px;
+text-transform: uppercase;
+}
 footer { text-align: center; margin-top: 30px; border-top: 1px solid #333; padding-top: 10px; font-size: 12px; }
 </style>
 </head>
@@ -27,125 +31,69 @@ footer { text-align: center; margin-top: 30px; border-top: 1px solid #333; paddi
 
 <div class="container">
 <header>
-<img src="logo-512.png" alt="Logo">
+<img src="logo-512.png">
 <h1>Posses Seminário e Amparo HAZAQ</h1>
-<small><i>"Fortalecidos para Fortalecer!"</i></small>
 </header>
 
-<div class="form-box">
 <div class="campo">
-<label>Nome do Item:</label>
-<input type="text" id="nome_item">
+<label>Item:</label>
+<input type="text" id="item">
 </div>
-
 <div class="campo">
-<label>Tipo de Aquisição:</label>
-<select id="tipo_aq" onchange="document.getElementById('bloco_fonte').style.display = (this.value=='doado'?'block':'none')">
+<label>Tipo:</label>
+<select id="tipo" onchange="document.getElementById('divF').style.display=(this.value=='doado'?'block':'none')">
 <option value="comprado">Comprado</option>
 <option value="doado">Doado</option>
 </select>
 </div>
-
-<div class="campo" id="bloco_fonte" style="display:none">
-<label>Fonte (Doador):</label>
-<input type="text" id="fonte_item">
+<div class="campo" id="divF" style="display:none">
+<label>Fonte:</label>
+<input type="text" id="fonte">
 </div>
-
-<div style="display: flex; gap: 10px;">
-<div class="campo" style="flex: 1;">
-<label>Data:</label>
-<input type="date" id="data_aq">
-</div>
-<div class="campo" style="flex: 1;">
-<label>Registrado por:</label>
-<input type="text" id="reg_por">
-</div>
-</div>
-
 <div class="campo">
-<label>Valor Estimado (R$`):</label>
-<input type="number" id="valor_est" step="0.01">
+<label>Data:</label>
+<input type="date" id="data">
+</div>
+<div class="campo">
+<label>Registrador:</label>
+<input type="text" id="reg">
+</div>
+<div class="campo">
+<label>Valor R$`:</label>
+<input type="number" id="val">
 </div>
 
-<button type="button" class="btn-green" onclick="salvar()">Registrar Posse</button>
-</div>
-
-<div class="table-wrap">
-<table id="tabela_posses">
-<thead>
-<tr>
-<th>Item</th>
-<th>Tipo</th>
-<th>Fonte</th>
-<th>Valor</th>
-<th>Data</th>
-</tr>
-</thead>
-<tbody id="lista_itens"></tbody>
-</table>
-</div>
-
-<button class="btn-red" onclick="apagarTudo()">Limpar Toda a Lista</button>
+<a href="#" class="btn-link" onclick="gerarLink(this)">Enviar</a>
 
 <footer>
-<strong>HAZAQ</strong><br>
-Gilberto Moreira - Mato Grosso-BR
+<strong>HAZAQ</strong><br>Gilberto Moreira - MT
 </footer>
 </div>
 
 <script>
-window.onload = carregar;
+function gerarLink(elemento) {
+const item = document.getElementById('item').value;
+const tipo = document.getElementById('tipo').value;
+const fonte = document.getElementById('fonte').value || '-';
+const data = document.getElementById('data').value;
+const reg = document.getElementById('reg').value;
+const val = document.getElementById('val').value || '0.00';
 
-function salvar() {
-const item = document.getElementById('nome_item').value;
-const tipo = document.getElementById('tipo_aq').value;
-const fonte = document.getElementById('fonte_item').value || '-';
-const data = document.getElementById('data_aq').value;
-const reg = document.getElementById('reg_por').value;
-const valor = document.getElementById('valor_est').value || '0.00';
-
-if (!item || !data || !reg) {
+if(!item || !data || !reg) {
 alert("Preencha Item, Data e Registrador!");
-return;
+return false;
 }
 
-const objeto = { item, tipo, fonte, data, reg, valor };
-
-let banco = JSON.parse(localStorage.getItem('hazaq_posses')) || [];
-banco.push(objeto);
-localStorage.setItem('hazaq_posses', JSON.stringify(banco));
-
-// Limpa os campos para o próximo registro
-document.getElementById('nome_item').value = '';
-document.getElementById('valor_est').value = '';
-document.getElementById('fonte_item').value = '';
-
-carregar(); // Atualiza a tabela abaixo
-}
-
-function carregar() {
-const corpo = document.getElementById('lista_itens');
-corpo.innerHTML = '';
-let banco = JSON.parse(localStorage.getItem('hazaq_posses')) || [];
-
-banco.forEach(i => {
-const row = corpo.insertRow();
-row.innerHTML = &lt;td&gt;${i.item}</td>
-<td>{i.fonte}</td>
-<td>Rlatex
+const dataBr = data.split('-').reverse().join('/');
+const msg = *POSSE HAZAQ*%0A*Item:*${item}%0ATipo:{fonte}%0AValor: Rlatex
  
 
-{parseFloat(i.valor).toFixed(2)}</td>
-<td>${i.data.split('-').reverse().join('/')}</td>
-`;
-});
-}
+{val}%0AData:{reg}`;
 
-function apagarTudo() {
-if (confirm("Deseja apagar permanentemente todos os registros?")) {
-localStorage.removeItem('hazaq_posses');
-carregar();
-}
+const fone = "5566984666186";
+
+// Altera o destino do link no momento do clique
+elemento.href = https://wa.me/${fone}?text=${msg};
 }
 </script>
 
