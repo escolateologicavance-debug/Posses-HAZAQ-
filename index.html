@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Posses do Seminário HAZAQ</title>
+<style>
+body { font-family: Arial, sans-serif; background-color: #f0f2f5; margin: 0; padding: 20px; }
+.container { max-width: 1000px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 15px; margin-bottom: 20px; }
+.logos { display: flex; justify-content: center; gap: 15px; margin-bottom: 10px; }
+.logos img { height: 70px; }
+h1 { margin: 5px 0; font-size: 22px; color: #1a1a1a; }
+.slogan { font-style: italic; color: #555; }
+.form-box { background: #f9f9f9; padding: 15px; border: 1px solid #ddd; margin-bottom: 20px; border-radius: 5px; }
+.grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+label { display: block; font-weight: bold; margin-bottom: 3px; font-size: 13px; }
+input, select { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px; }
+.btn { grid-column: span 3; background: #27ae60; color: white; padding: 12px; border: none; cursor: pointer; margin-top: 10px; font-weight: bold; font-size: 16px; }
+.btn:hover { background: #219150; }
+.btn-clear { background: #c0392b; margin-top: 20px; grid-column: span 1; }
+table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+th, td { border: 1px solid #ddd; padding: 10px; text-align: left; font-size: 13px; }
+th { background: #333; color: white; }
+footer { text-align: center; margin-top: 30px; padding-top: 15px; border-top: 1px solid #333; font-size: 14px; }
+#campoFonte { display: none; grid-column: span 3; }
+@media print { .form-box, .btn-clear { display: none; } }
+</style>
+</head>
+<body>
+
+<div class="container">
+<header>
+<div class="logos">
+<img src="logo-512.png" alt="logo-512.png">
+<img src="logo-192.png" alt="logo-192.png">
+</div>
+<h1>Posses Seminário e Amparo HAZAQ</h1>
+<div class="slogan">"Fortalecidos para Fortalecer!"</div>
+</header>
+
+<div class="form-box">
+<div class="grid">
+<div>
+<label>Nome do Item</label>
+<input type="text" id="nome">
+</div>
+<div>
+<label>Tipo de Aquisição</label>
+<select id="tipo" onchange="verificarTipo()">
+<option value="comprado">Comprado</option>
+<option value="doado">Doado</option>
+</select>
+</div>
+<div>
+<label>Data da Aquisição</label>
+<input type="date" id="data">
+</div>
+<div id="campoFonte">
+<label>Fonte do Donativo (Pessoa Física, Empresa, Estado)</label>
+<input type="text" id="fonte">
+</div>
+<div>
+<label>Registrado por</label>
+<input type="text" id="registrador">
+</div>
+<div>
+<label>Valor Estimado (R$`)</label>
+<input type="number" id="valor" step="0.01">
+</div>
+<button class="btn" onclick="adicionar()">Registrar Posse</button>
+</div>
+</div>
+
+<table id="tabela">
+<thead>
+<tr>
+<th>Item</th>
+<th>Tipo</th>
+<th>Fonte</th>
+<th>Valor Est.</th>
+<th>Data</th>
+<th>Registrador</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+<button class="btn btn-clear" onclick="limparTudo()">Limpar Toda a Lista</button>
+
+<footer>
+<strong>HAZAQ</strong><br>
+Gilberto Moreira<br>
+Mato Grosso-BR
+</footer>
+</div>
+
+<script>
+// Carregar dados ao abrir a página
+document.addEventListener('DOMContentLoaded', carregarDados);
+
+function verificarTipo() {
+const tipo = document.getElementById('tipo').value;
+document.getElementById('campoFonte').style.display = (tipo === 'doado') ? 'block' : 'none';
+}
+
+function adicionar() {
+const item = {
+nome: document.getElementById('nome').value,
+tipo: document.getElementById('tipo').value,
+fonte: document.getElementById('fonte').value || '-',
+registrador: document.getElementById('registrador').value,
+valor: document.getElementById('valor').value,
+data: document.getElementById('data').value
+};
+
+if(!item.nome || !item.registrador || !item.data) {
+alert('Preencha os campos obrigatórios!');
+return;
+}
+
+salvarItem(item);
+inserirNaTabela(item);
+limparCampos();
+}
+
+function inserirNaTabela(item) {
+const corpo = document.querySelector('#tabela tbody');
+const linha = corpo.insertRow();
+linha.innerHTML = &lt;td&gt;${item.nome}</td>
+<td>{item.fonte}</td>
+<td>Rlatex
+ 
+
+{parseFloat(item.valor || 0).toFixed(2)}</td>
+<td>{item.registrador}</td>
+`;
+}
+
+function salvarItem(item) {
+let lista = JSON.parse(localStorage.getItem('possesHazaq')) || [];
+lista.push(item);
+localStorage.setItem('possesHazaq', JSON.stringify(lista));
+}
+
+function carregarDados() {
+let lista = JSON.parse(localStorage.getItem('possesHazaq')) || [];
+lista.forEach(inserirNaTabela);
+}
+
+function limparCampos() {
+document.getElementById('nome').value = '';
+document.getElementById('fonte').value = '';
+document.getElementById('valor').value = '';
+document.getElementById('data').value = '';
+document.getElementById('tipo').value = 'comprado';
+verificarTipo();
+}
+
+function limparTudo() {
+if(confirm('Tem certeza que deseja apagar TODOS os registros permanentemente?')) {
+localStorage.removeItem('possesHazaq');
+location.reload();
+}
+}
+</script>
+
+</body>
+</html>
