@@ -73,7 +73,9 @@ const msg = *POSSE HAZAQ*%0A*Item:*${i}%0ATipo:{document.getElementById('fonte')
 
 {valor}%0AData:{r}`;
 
-window.location.href = "https://api.whatsapp.com/send?phone=5566984666186&text=" + msg;
-}
-</script>
+const url = `https://api.whatsapp.com/send?phone=5566984666186&text=${mensagem}`;
+            window.open(url, '_blank');
+        };
+    </script>
 </body>
+</html>
