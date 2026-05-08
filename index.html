@@ -3,79 +3,210 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <link rel="manifest" href="manifest.json">
+
 <title>Posses HAZAQ</title>
+
 <style>
-body { font-family: sans-serif; background: #f0f2f5; margin: 0; padding: 15px; }
-.container { max-width: 400px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; border: 1px solid #ccc; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-header { text-align: center; border-bottom: 2px solid #333; margin-bottom: 20px; padding-bottom: 10px; }
-.logo-box { width: 80px; height: 80px; margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; }
-.logo-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
-h1 { font-size: 18px; margin: 5px 0; }
-.group { margin-bottom: 15px; text-align: left; }
-label { display: block; font-weight: bold; font-size: 13px; margin-bottom: 5px; }
-input, select { width: 100%; padding: 12px; border: 1px solid #999; border-radius: 5px; font-size: 16px; box-sizing: border-box; }
-.btn { display: block; width: 100%; background: #27ae60; color: white; padding: 18px; border: none; border-radius: 5px; font-weight: bold; font-size: 18px; text-transform: uppercase; cursor: pointer; text-align: center; text-decoration: none; }
-footer { text-align: center; margin-top: 25px; border-top: 1px solid #333; padding-top: 15px; font-size: 13px; }
+body{
+    font-family:sans-serif;
+    background:#f0f2f5;
+    margin:0;
+    padding:15px;
+}
+
+.container{
+    max-width:400px;
+    margin:auto;
+    background:#fff;
+    padding:20px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    box-shadow:0 4px 6px rgba(0,0,0,0.1);
+}
+
+header{
+    text-align:center;
+    border-bottom:2px solid #333;
+    margin-bottom:20px;
+    padding-bottom:10px;
+}
+
+.logo-box{
+    width:80px;
+    height:80px;
+    margin:0 auto 10px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.logo-box img{
+    max-width:100%;
+    max-height:100%;
+    object-fit:contain;
+}
+
+h1{
+    font-size:18px;
+    margin:5px 0;
+}
+
+.group{
+    margin-bottom:15px;
+    text-align:left;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    font-size:13px;
+    margin-bottom:5px;
+}
+
+input,
+select{
+    width:100%;
+    padding:12px;
+    border:1px solid #999;
+    border-radius:5px;
+    font-size:16px;
+    box-sizing:border-box;
+}
+
+.btn{
+    display:block;
+    width:100%;
+    background:#27ae60;
+    color:#fff;
+    padding:18px;
+    border:none;
+    border-radius:5px;
+    font-weight:bold;
+    font-size:18px;
+    text-transform:uppercase;
+    cursor:pointer;
+}
+
+footer{
+    text-align:center;
+    margin-top:25px;
+    border-top:1px solid #333;
+    padding-top:15px;
+    font-size:13px;
+}
 </style>
 </head>
+
 <body>
+
 <div class="container">
+
 <header>
-<div class="logo-box"><img src="logo-512.png" alt="Logo"></div>
-<h1>Posses Seminário HAZAQ</h1>
+    <div class="logo-box">
+        <img src="logo-512.png" alt="Logo">
+    </div>
+
+    <h1>Posses Seminário HAZAQ</h1>
 </header>
+
 <div class="group">
-<label>Item:</label>
-<input type="text" id="item" placeholder="Ex: Van Mercedes">
+    <label>Item:</label>
+    <input type="text" id="item" placeholder="Ex: Van Mercedes">
 </div>
+
 <div class="group">
-<label>Tipo:</label>
-<select id="tipo" onchange="document.getElementById('fnt').style.display=(this.value=='Doado'?'block':'none')">
-<option value="Comprado">Comprado</option>
-<option value="Doado">Doado</option>
-</select>
+    <label>Tipo:</label>
+
+    <select id="tipo" onchange="mostrarDoador()">
+        <option value="Comprado">Comprado</option>
+        <option value="Doado">Doado</option>
+    </select>
 </div>
+
 <div id="fnt" class="group" style="display:none;">
-<label>Doador:</label>
-<input type="text" id="fonte">
+    <label>Doador:</label>
+    <input type="text" id="fonte">
 </div>
+
 <div class="group">
-<label>Data:</label>
-<input type="date" id="data">
+    <label>Data:</label>
+    <input type="date" id="data">
 </div>
+
 <div class="group">
-<label>Registrador:</label>
-<input type="text" id="reg">
+    <label>Registrador:</label>
+    <input type="text" id="reg">
 </div>
+
 <div class="group">
-<label>Valor R$`:</label>
-<input type="number" id="valor" step="0.01">
+    <label>Valor R$:</label>
+    <input type="number" id="valor" step="0.01">
 </div>
-<button type="button" class="btn" onclick="enviar()">Enviar para WhatsApp</button>
+
+<button class="btn" onclick="enviar()">
+    Enviar para WhatsApp
+</button>
+
 <footer>
-<strong>HAZAQ</strong><br>Gilberto Moreira - MT
+    <strong>HAZAQ</strong><br>
+    Gilberto Moreira - MT
 </footer>
+
 </div>
+
 <script>
-if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
-function enviar() {
-const i = document.getElementById('item').value;
-const d = document.getElementById('data').value;
-const r = document.getElementById('reg').value;
-if(!i || !d || !r) return alert("Preencha Item, Data e Registrador!");
 
-const valor = document.getElementById('valor').value || '0.00';
-const dataBr = d.split('-').reverse().join('/');
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+}
 
-const msg = *POSSE HAZAQ*%0A*Item:*${i}%0ATipo:{document.getElementById('fonte').value || '-'}%0AValor: Rlatex
- 
+function mostrarDoador(){
 
-{valor}%0AData:{r}`;
+    const tipo = document.getElementById('tipo').value;
+    const campo = document.getElementById('fnt');
 
-const url = `https://api.whatsapp.com/send?phone=5566984666186&text=${mensagem}`;
-            window.open(url, '_blank');
-        };
-    </script>
+    campo.style.display = tipo === 'Doado'
+        ? 'block'
+        : 'none';
+}
+
+function enviar(){
+
+    const item = document.getElementById('item').value.trim();
+    const tipo = document.getElementById('tipo').value;
+    const fonte = document.getElementById('fonte').value.trim() || '-';
+    const data = document.getElementById('data').value;
+    const reg = document.getElementById('reg').value.trim();
+    const valor = document.getElementById('valor').value || '0,00';
+
+    if(!item || !data || !reg){
+        alert('Preencha Item, Data e Registrador!');
+        return;
+    }
+
+    const dataBr = data.split('-').reverse().join('/');
+
+    const mensagem =
+`*POSSE HAZAQ*
+
+*Item:* ${item}
+*Tipo:* ${tipo}
+*Doador:* ${fonte}
+*Valor:* R$ ${valor}
+*Data:* ${dataBr}
+*Registrador:* ${reg}`;
+
+    const numero = '5566984666186';
+
+    const url =
+`https://api.whatsapp.com/send?phone=${numero}&text=${encodeURIComponent(mensagem)}`;
+
+    window.open(url, '_blank');
+}
+
+</script>
+
 </body>
 </html>
