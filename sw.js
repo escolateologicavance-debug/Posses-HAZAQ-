@@ -1,11 +1,37 @@
-const cacheName = 'hazaq-posses-v2';
-const assets = ['./', './index.html', './manifest.json'];
+const cacheName = 'hazaq-posses-v3';
 
-self.addEventListener('install', e => {
-  e.waitUntil(caches.open(cacheName).then(c => c.addAll(assets)));
+const assets = [
+    './',
+    './index.html',
+    './manifest.json',
+    './logo-192.png',
+    './logo-512.png'
+];
+
+self.addEventListener('install', event => {
+
+    event.waitUntil(
+        caches.open(cacheName)
+        .then(cache => {
+            return cache.addAll(assets);
+        })
+    );
 });
 
-self.addEventListener('fetch', e => {
-  if (e.request.url.includes('whatsapp.com')) return;
-  e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+self.addEventListener('fetch', event => {
+
+    if(event.request.url.includes('whatsapp.com')){
+        return;
+    }
+
+    event.respondWith(
+
+        caches.match(event.request)
+        .then(response => {
+
+            return response || fetch(event.request);
+
+        })
+
+    );
 });
